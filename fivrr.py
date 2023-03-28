@@ -3,7 +3,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import   MessageHandler, Filters ,Updater, CommandHandler, ConversationHandler, CallbackContext, CallbackQueryHandler
 import mysql.connector
 
-# Connect to the SQLite database
+# # Connect to the SQLite database
 conn = mysql.connector.connect(
   host ='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
   user ="doadmin",
@@ -12,16 +12,16 @@ conn = mysql.connector.connect(
   port=25060
 )
 cur = conn.cursor()
-def dbcon():
-    conn = mysql.connector.connect(
-      host ='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
-      user ="doadmin",
-      passwd ="AVNS_y2INtIf0l_w0ZJgiY29",
-      database="leads",
-      port=25060
-    )
-    cur = conn.cursor()
-    return cur
+# def dbcon():
+#     conn = mysql.connector.connect(
+#       host ='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
+#       user ="doadmin",
+#       passwd ="AVNS_y2INtIf0l_w0ZJgiY29",
+#       database="leads",
+#       port=25060
+#     )
+#     cur = conn.cursor()
+#     return cur
 
 
 cur.execute("CREATE TABLE IF NOT EXISTS users(user_id INT AUTO_INCREMENT PRIMARY KEY ,user_key BIGINT , username VARCHAR(255)  , Balance INT NOT NULL DEFAULT 0  )")
@@ -59,11 +59,21 @@ def start(update, context):
       qury =f"INSERT INTO users(user_key, username) VALUES (%s,%s);"
       val = tuple([user_iid, usernamee])
       cur.execute(qury,val)
-      context.bot.send_message(chat_id=user_iid, text=f"hello {usernamee} wecome back")
-      conn.commit()
-
+      avl1 = f"SELECT * FROM users WHERE user_key = {user_iid}"
+      cur.execute(avl1)
+      squr = cur.fetchall()
+      context.bot.send_message(chat_id=user_iid, text=f"Hello {squr[2].upper()}")
+      cur.execute("SELECT * FROM jobs")
+      jobs=cur.fetchall()[0]
+      yourjob = []
+      for y in jobs:
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=y[0])],])
+        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{'X'*(len(y[5])-2)}{y[5][-2:]}\nName -:{y[2]}" , reply_markup=reply_markup)
     else :
-      context.bot.send_message(chat_id=user_iid, text=f"hello {usernamee} wecome back")
+      avl2 = f"SELECT * FROM users WHERE user_key = {user_iid}"
+      cur.execute(avl2)
+      squr = cur.fetchall()[0]
+      context.bot.send_message(chat_id=user_iid, text=f"Hello {squr[2].upper()}")
       context.bot.send_message(chat_id=user_iid, text=f"finding your job ...")
       
       cur.execute("SELECT * FROM jobs")
@@ -71,7 +81,8 @@ def start(update, context):
       yourjob = []
       for y in jobs:
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=y[0])],])
-        context.bot.send_message(chat_id=user_iid, text=f"Title \n{y[1]}\n Description \n {y[3]} \n {'X'*10}{y[5][-2:]} \n {y[2]}" , reply_markup=reply_markup)
+        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{'X'*(len(y[5])-2)}{y[5][-2:]}\nName -:{y[2]}" , reply_markup=reply_markup)
+    conn.commit()
         
 def InlineKeyboardHandler(update: Update, _: CallbackContext):
     conn = mysql.connector.connect(
@@ -84,7 +95,6 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
     user_key = update.callback_query.message.chat_id
     avl = f"SELECT * FROM users WHERE user_key = {user_key}"
     cur.execute(avl)
-    # conn.commit()
 
     bal = cur.fetchall()[0][3]
     print(bal)
@@ -101,19 +111,30 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
       cur.execute(job)
       y = cur.fetchall()[0]
       
-      _.bot.send_message(chat_id=user_key, text=f"Title \n{y[1]}\n Description \n {y[3]} \n {y[5]} \n {y[2]}" )
+      _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
     else:
       
-      _.bot.send_message(chat_id=user_key, text=f"hii {update.callback_query.message.chat.username} \n Your balance is low. Please recharge your account by clicking on the button below.\n your id : {user_key} \n contect @Naman0058" ,)
+      _.bot.send_message(chat_id=user_key, text=f"hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Namam0058 \nYour Unique ID -: {user_key}" ,)
+    conn.commit()
     
     
 def details(update, context):
+    conn = mysql.connector.connect(
+      host ='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
+      user ="doadmin",
+      passwd ="AVNS_y2INtIf0l_w0ZJgiY29",
+      database="leads",
+      port=25060
+    )
+    cur = conn.cursor()
     user_iid = update.message.chat_id
     usernamee = update.message.chat.username 
     avl = f"SELECT * FROM users WHERE user_key = {user_iid}"
     cur.execute(avl)
     squr = cur.fetchall()[0]
     context.bot.send_message(chat_id=user_iid, text=f"username {squr[2]} \n user ID:{squr[1]} \n ********\n Balance: {squr[3]}")
+    conn.commit()
+
 
 
 # Create a new Telegram bot with the provided token
@@ -137,7 +158,7 @@ def details(update, context):
     
     
 conn.commit()
-    
+    # 
     # Send the job data to the user
 
 bot = telegram.Bot(token='6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4')
