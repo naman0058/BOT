@@ -26,7 +26,7 @@ cur = conn.cursor()
 
 cur.execute("CREATE TABLE IF NOT EXISTS users(user_id INT AUTO_INCREMENT PRIMARY KEY ,user_key BIGINT , username VARCHAR(255)  , Balance INT NOT NULL DEFAULT 0  )")
 cur.execute("CREATE TABLE IF NOT EXISTS jobs(job_id INT AUTO_INCREMENT PRIMARY KEY ,topic VARCHAR(255) DEFAULT NULL,Client VARCHAR(255) DEFAULT NULL, description TEXT DEFAULT NULL, Category VARCHAR(255) DEFAULT NULL, phoneno VARCHAR(255) DEFAULT NULL  )")
-cur.execute("CREATE TABLE IF NOT EXISTS leaddata(job_id INT DEFAULT NULL,user_key BIGINT DEFAULT NULL , date DATETIME DEFAULT NULL)")
+cur.execute("CREATE TABLE IF NOT EXISTS leaddata(id INT AUTO_INCREMENT PRIMARY KEY ,job_id INT DEFAULT NULL,user_key BIGINT DEFAULT NULL , date DATETIME DEFAULT NULL)")
 
 
 # Define a function to handle the /jobs command
