@@ -1,6 +1,6 @@
 import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import   MessageHandler, filters ,Updater, CommandHandler, ConversationHandler, CallbackContext, CallbackQueryHandler
+from telegram.ext import   MessageHandler, Filters ,Updater, CommandHandler, ConversationHandler, CallbackContext, CallbackQueryHandler
 import mysql.connector
 
 # Connect to the SQLite database
@@ -33,8 +33,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS jobs(job_id INT AUTO_INCREMENT PRIMARY K
 
 # Define a function to handle the /apply command
 def start(update, context):
-  
-  conn = mysql.connector.connect(
+    conn = mysql.connector.connect(
       host ='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
       user ="doadmin",
       passwd ="AVNS_y2INtIf0l_w0ZJgiY29",
@@ -42,7 +41,6 @@ def start(update, context):
       port=25060
     )
     cur = conn.cursor()
-  
     # Get the user's ID and username
     user_iid = update.message.chat_id
     usernamee = update.message.chat.username 
