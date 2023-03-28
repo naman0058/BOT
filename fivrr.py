@@ -26,6 +26,7 @@ cur = conn.cursor()
 
 cur.execute("CREATE TABLE IF NOT EXISTS users(user_id INT AUTO_INCREMENT PRIMARY KEY ,user_key BIGINT , username VARCHAR(255)  , Balance INT NOT NULL DEFAULT 0  )")
 cur.execute("CREATE TABLE IF NOT EXISTS jobs(job_id INT AUTO_INCREMENT PRIMARY KEY ,topic VARCHAR(255) DEFAULT NULL,Client VARCHAR(255) DEFAULT NULL, description TEXT DEFAULT NULL, Category VARCHAR(255) DEFAULT NULL, phoneno VARCHAR(255) DEFAULT NULL  )")
+cur.execute("CREATE TABLE IF NOT EXISTS leaddata(job_id INT DEFAULT NULL,user_key BIGINT DEFAULT NULL , date DATETIME DEFAULT NULL)")
 
 
 # Define a function to handle the /jobs command
@@ -85,6 +86,7 @@ def start(update, context):
     conn.commit()
         
 def InlineKeyboardHandler(update: Update, _: CallbackContext):
+    
     conn = mysql.connector.connect(
       host ='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
       user ="doadmin",
@@ -92,29 +94,48 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
       database="leads",
       port=25060
     )
+
+    cur = conn.cursor()
+
     user_key = update.callback_query.message.chat_id
-    avl = f"SELECT * FROM users WHERE user_key = {user_key}"
-    cur.execute(avl)
+    option=update.callback_query.data
+    avl1 = f"SELECT * FROM leaddata WHERE job_id = {option} AND user_key = {user_key}"
+    cur.execute(avl1)
+    lead = cur.fetchall()
+    if lead == []:
+        avl = f"SELECT * FROM users WHERE user_key = {user_key}"
+        cur.execute(avl)
 
-    bal = cur.fetchall()[0][3]
-    print(bal)
-    # print(update)
-    if bal >=25 or bal == None:
-      upd="UPDATE users SET Balance = Balance-25 WHERE user_key = %s"
-      val =tuple([user_key])
+        bal = cur.fetchall()[0][3]
+        print(bal)
+        # print(update)
+        if bal >=25 or bal == None:
+            upd="UPDATE users SET Balance = Balance-25 WHERE user_key = %s ;"
+            val =tuple([user_key])
 
-      cur.execute(upd,val)
-      conn.commit()
-      
-      option=update.callback_query.data
-      job = f"SELECT * FROM jobs WHERE job_id = {option}"
-      cur.execute(job)
-      y = cur.fetchall()[0]
-      
-      _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
+            cur.execute(upd,val)
+            exe="INSERT INTO leaddata(job_id, user_key) VALUES (%s,%s);"
+            val1 =tuple([option,user_key])
+
+            cur.execute(exe,val1)
+            # conn.commit()
+            
+            
+            job = f"SELECT * FROM jobs WHERE job_id = {option}"
+            cur.execute(job)
+            y = cur.fetchall()[0]
+            
+            _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
+        else:
+            
+            _.bot.send_message(chat_id=user_key, text=f"hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Namam0058 \nYour Unique ID -: {user_key}" ,)
+    
     else:
-      
-      _.bot.send_message(chat_id=user_key, text=f"hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Namam0058 \nYour Unique ID -: {user_key}" ,)
+        job = f"SELECT * FROM jobs WHERE job_id = {option}"
+        cur.execute(job)
+        y = cur.fetchall()[0]
+        
+        _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
     conn.commit()
     
     
@@ -161,10 +182,10 @@ conn.commit()
     # 
     # Send the job data to the user
 
-bot = telegram.Bot(token='6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4')
+bot = telegram.Bot(token='5991269100:AAEO--c1M0lE6K3ijgbDuc1E4vAC8VEZ6zE')
 
 # Set up an Updater to handle incoming messages
-updater = Updater(token='6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4', use_context=True)
+updater = Updater(token='5991269100:AAEO--c1M0lE6K3ijgbDuc1E4vAC8VEZ6zE', use_context=True)
 
 
 
