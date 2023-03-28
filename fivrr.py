@@ -41,7 +41,7 @@ def start(update, context):
       database="leads",
       port=25060
     )
-     cur = conn.cursor()
+    cur = conn.cursor()
   
     # Get the user's ID and username
     user_iid = update.message.chat_id
