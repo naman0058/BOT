@@ -46,8 +46,8 @@ def start(update, context):
     user_iid = update.message.chat_id
     usernamee = update.message.chat.username 
     first_name = update.message.chat.first_name
-    last_name = update.message.chat.last_name
-    for x in [usernamee,first_name,last_name]:
+    # last_name = update.message.chat.last_name
+    for x in [usernamee,first_name]:
       print(x)
       if x != None:
         usernamee = x
