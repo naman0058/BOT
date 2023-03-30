@@ -52,7 +52,6 @@ def start(update, context):
       if x != None:
         usernamee = x
     print(usernamee)
-    print(user_iid)
     avl = f"SELECT * FROM users WHERE user_key = {user_iid}"
     cur.execute(avl)
     squr = cur.fetchall()
@@ -60,14 +59,14 @@ def start(update, context):
     if squr ==[]:
       qury =f"INSERT INTO users(user_key, username) VALUES (%s,%s);"
       val = tuple([user_iid, usernamee])
-      print(cur.execute(qury,val))
       cur.execute(qury,val)
       avl1 = f"SELECT * FROM users WHERE user_key = {user_iid}"
       cur.execute(avl1)
-      squr = cur.fetchall()
-      context.bot.send_message(chat_id=user_iid, text=f"Hello {squr[2].upper()}")
+      squr1 = cur.fetchall()[0]
+      
+      context.bot.send_message(chat_id=user_iid, text=f"Hello {squr1[2].upper()}")
       cur.execute("SELECT * FROM jobs")
-      jobs=cur.fetchall()[0]
+      jobs=cur.fetchall()
       yourjob = []
       for y in jobs:
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=y[0])],])
@@ -77,7 +76,7 @@ def start(update, context):
       cur.execute(avl2)
       squr = cur.fetchall()[0]
       context.bot.send_message(chat_id=user_iid, text=f"Hello {squr[2].upper()}")
-      context.bot.send_message(chat_id=user_iid, text=f"Finding Your Job ...")
+      context.bot.send_message(chat_id=user_iid, text=f"finding your job ...")
       
       cur.execute("SELECT * FROM jobs")
       jobs=cur.fetchall()
@@ -127,10 +126,10 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             cur.execute(job)
             y = cur.fetchall()[0]
             
-            _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {y[5]}\nName -: {y[2]}" )
+            _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
         else:
             
-            _.bot.send_message(chat_id=user_key, text=f"Hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Naman0058 \nYour Unique ID -: {user_key}" ,)
+            _.bot.send_message(chat_id=user_key, text=f"hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Namam0058 \nYour Unique ID -: {user_key}" ,)
     
     else:
         job = f"SELECT * FROM jobs WHERE job_id = {option}"
