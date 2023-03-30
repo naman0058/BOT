@@ -126,7 +126,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             cur.execute(job)
             y = cur.fetchall()[0]
             
-            _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {'X'*(len(y[5])-2)}{y[5][-2:]}\nName -: {y[2]}\nDate -: {y[6]}" )
+            _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
         else:
             
             _.bot.send_message(chat_id=user_key, text=f"hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Namam0058 \nYour Unique ID -: {user_key}" ,)
@@ -136,7 +136,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
         cur.execute(job)
         y = cur.fetchall()[0]
         
-        _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {'X'*(len(y[5])-2)}{y[5][-2:]}\nName -: {y[2]}\nDate -: {y[6]}" )
+        _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
     conn.commit()
     
     
