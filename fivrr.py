@@ -46,8 +46,8 @@ def start(update, context):
     user_iid = update.message.chat_id
     usernamee = update.message.chat.username 
     first_name = update.message.chat.first_name
-    # last_name = update.message.chat.last_name
-    for x in [usernamee,first_name]:
+    last_name = update.message.chat.last_name
+    for x in [usernamee,first_name,last_name]:
       print(x)
       if x != None:
         usernamee = x
@@ -128,7 +128,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {y[5]}\nName -: {y[2]}\nDate -: {y[6]}" )
         else:
             
-            _.bot.send_message(chat_id=user_key, text=f"Hii Your balance is low . Please recharge your account by clicking on below contact ID\n@taskTango \nYour Unique ID -: {user_key}" ,)
+            _.bot.send_message(chat_id=user_key, text=f"Hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Naman0058 \nYour Unique ID -: {user_key}" ,)
     
     else:
         job = f"SELECT * FROM jobs WHERE job_id = {option}"
