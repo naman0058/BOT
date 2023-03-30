@@ -60,10 +60,12 @@ def start(update, context):
     if squr ==[]:
       qury =f"INSERT INTO users(user_key, username) VALUES (%s,%s);"
       val = tuple([user_iid, usernamee])
+      print(val)
       cur.execute(qury,val)
       avl1 = f"SELECT * FROM users WHERE user_key = {user_iid}"
       cur.execute(avl1)
       squr = cur.fetchall()
+      print(squr)
       context.bot.send_message(chat_id=user_iid, text=f"Hello {squr[2].upper()}")
       cur.execute("SELECT * FROM jobs")
       jobs=cur.fetchall()[0]
