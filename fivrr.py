@@ -75,7 +75,7 @@ def start(update, context):
       cur.execute(avl2)
       squr = cur.fetchall()[0]
       context.bot.send_message(chat_id=user_iid, text=f"Hello {squr[2].upper()}")
-      context.bot.send_message(chat_id=user_iid, text=f"finding your job ...")
+      context.bot.send_message(chat_id=user_iid, text=f"Finding Your Job ...")
       
       cur.execute("SELECT * FROM jobs")
       jobs=cur.fetchall()
@@ -125,10 +125,10 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             cur.execute(job)
             y = cur.fetchall()[0]
             
-            _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{y[5]}\nName -:{y[2]}" )
+            _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {y[5]}\nName -: {y[2]}" )
         else:
             
-            _.bot.send_message(chat_id=user_key, text=f"hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Namam0058 \nYour Unique ID -: {user_key}" ,)
+            _.bot.send_message(chat_id=user_key, text=f"Hii Your balance is low . Please recharge your account by clicking on below contact ID\n@Naman0058 \nYour Unique ID -: {user_key}" ,)
     
     else:
         job = f"SELECT * FROM jobs WHERE job_id = {option}"
