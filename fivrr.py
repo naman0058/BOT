@@ -129,7 +129,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {y[5]}\nName -: {y[2]}\nDate -: {y[6]}" )
         else:
             
-            _.bot.send_message(chat_id=user_key, text=f"Hii Your balance is low . Please recharge your account by clicking on below \ncontact ID @taskTango \nYour Unique ID -: {user_key}" ,)
+            _.bot.send_message(chat_id=user_key, text=f"Hii Your Balance is Low . Please recharge your account by clicking on below -: \ncontact ID -: @taskTango \nYour Unique ID -: {user_key}" ,)
     
     else:
         job = f"SELECT * FROM jobs WHERE job_id = {option}"
