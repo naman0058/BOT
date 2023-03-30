@@ -69,7 +69,7 @@ def start(update, context):
       yourjob = []
       for y in jobs:
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=y[0])],])
-        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{'X'*(len(y[5])-2)}{y[5][-2:]}\nName -:{y[2]}" , reply_markup=reply_markup)
+        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{'X'*(len(y[5])-2)}{y[5][-2:]}\nName -:{y[2]}\nDate -: {y[6]}" , reply_markup=reply_markup)
     else :
       avl2 = f"SELECT * FROM users WHERE user_key = {user_iid}"
       cur.execute(avl2)
@@ -82,7 +82,7 @@ def start(update, context):
       yourjob = []
       for y in jobs:
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=y[0])],])
-        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{'X'*(len(y[5])-2)}{y[5][-2:]}\nName -:{y[2]}" , reply_markup=reply_markup)
+        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -:{'X'*(len(y[5])-2)}{y[5][-2:]}\nName -:{y[2]}\nDate -: {y[6]}" , reply_markup=reply_markup)
     conn.commit()
         
 def InlineKeyboardHandler(update: Update, _: CallbackContext):
