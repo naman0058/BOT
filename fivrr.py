@@ -2,7 +2,7 @@ import telegram
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import   MessageHandler, Filters ,Updater, CommandHandler, ConversationHandler, CallbackContext, CallbackQueryHandler
 import mysql.connector
-
+from datetime import datetime
 # # Connect to the SQLite database
 conn = mysql.connector.connect(
   host ='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
@@ -26,7 +26,7 @@ cur = conn.cursor()
 
 cur.execute("CREATE TABLE IF NOT EXISTS users(user_id INT AUTO_INCREMENT PRIMARY KEY ,user_key BIGINT , username VARCHAR(255)  , Balance INT NOT NULL DEFAULT 0  )")
 cur.execute("CREATE TABLE IF NOT EXISTS jobs(job_id INT AUTO_INCREMENT PRIMARY KEY ,topic VARCHAR(255) DEFAULT NULL,Client VARCHAR(255) DEFAULT NULL, description TEXT DEFAULT NULL, Category VARCHAR(255) DEFAULT NULL, phoneno VARCHAR(255) DEFAULT NULL  )")
-cur.execute("CREATE TABLE IF NOT EXISTS leaddata(id INT AUTO_INCREMENT PRIMARY KEY ,job_id INT DEFAULT NULL,user_key BIGINT DEFAULT NULL , date DATETIME DEFAULT NULL)")
+cur.execute("CREATE TABLE IF NOT EXISTS leaddata(lead_id INT AUTO_INCREMENT PRIMARY KEY ,job_id INT DEFAULT NULL,user_key BIGINT DEFAULT NULL , date DATETIME DEFAULT NULL)")
 
 
 # Define a function to handle the /jobs command
@@ -112,10 +112,10 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
         if bal >=25 or bal == None:
             upd="UPDATE users SET Balance = Balance-25 WHERE user_key = %s ;"
             val =tuple([user_key])
-
+            today = datetime.now()
             cur.execute(upd,val)
-            exe="INSERT INTO leaddata(job_id, user_key) VALUES (%s,%s);"
-            val1 =tuple([option,user_key])
+            exe="INSERT INTO leaddata(job_id, user_key,date) VALUES (%s,%s,%s);"
+            val1 =tuple([option,user_key,today])
 
             cur.execute(exe,val1)
             # conn.commit()
@@ -182,10 +182,10 @@ conn.commit()
     # 
     # Send the job data to the user
 
-bot = telegram.Bot(token='5991269100:AAEO--c1M0lE6K3ijgbDuc1E4vAC8VEZ6zE')
+bot = telegram.Bot(token='6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4')
 
 # Set up an Updater to handle incoming messages
-updater = Updater(token='5991269100:AAEO--c1M0lE6K3ijgbDuc1E4vAC8VEZ6zE', use_context=True)
+updater = Updater(token='6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4', use_context=True)
 
 
 
