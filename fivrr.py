@@ -64,7 +64,7 @@ def start(update, context):
       cur.execute(avl1)
       squr1 = cur.fetchall()[0]
       
-      context.bot.send_message(chat_id=user_iid, text=f"Hello {squr1[2].upper()}")
+      context.bot.send_message(chat_id=user_iid, text=f"Welcome to India's first Telegram Bot for finding freelance work with client's contact numbers. Get started by typing /start to get new leads every time. \n\nAs a welcome gift, we are providing 2 free leads for you to get started.")
       cur.execute("SELECT * FROM jobs")
       jobs=cur.fetchall()
       yourjob = []
