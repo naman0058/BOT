@@ -100,7 +100,6 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
 
     user_key = update.callback_query.message.chat_id
     option=update.callback_query.data
-    print(option)
     avl1 = f"SELECT * FROM leaddata WHERE job_id = {option} AND user_key = {user_key}"
     cur.execute(avl1)
     lead = cur.fetchall()
@@ -116,6 +115,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             val =tuple([user_key])
             today = datetime.now()
             cur.execute(upd,val)
+            print(today)
             exe="INSERT INTO leaddata(job_id, user_key,date) VALUES (%s,%s,%s);"
             val1 =tuple([option,user_key,today])
 
