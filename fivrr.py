@@ -115,10 +115,9 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             val =tuple([user_key])
             today = datetime.now()
             cur.execute(upd,val)
-            print(today)
             exe="INSERT INTO leaddata(job_id, user_key,date) VALUES (%s,%s,%s);"
             val1 =tuple([option,user_key,today])
-
+            print(val1)
             cur.execute(exe,val1)
             # conn.commit()
             
