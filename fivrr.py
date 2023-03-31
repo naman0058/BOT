@@ -100,6 +100,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
 
     user_key = update.callback_query.message.chat_id
     option=update.callback_query.data
+    print(user_key)
     avl1 = f"SELECT * FROM leaddata WHERE job_id = {option} AND user_key = {user_key}"
     cur.execute(avl1)
     lead = cur.fetchall()
