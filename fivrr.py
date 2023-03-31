@@ -75,7 +75,7 @@ def start(update, context):
       avl2 = f"SELECT * FROM users WHERE user_key = {user_iid}"
       cur.execute(avl2)
       squr = cur.fetchall()[0]
-      context.bot.send_message(chat_id=user_iid, text=f"Welcome to India's first Telegram Bot for finding freelance work with client's contact numbers. Get started by typing "/start" to get new leads every time. As a welcome gift, we are providing 2 free leads for you to get started.")
+      context.bot.send_message(chat_id=user_iid, text=f"Welcome to India's first Telegram Bot for finding freelance work with client's contact numbers. Get started by typing /start to get new leads every time. As a welcome gift, we are providing 2 free leads for you to get started.")
       context.bot.send_message(chat_id=user_iid, text=f"Finding Your Job ...")
       
       cur.execute("SELECT * FROM jobs")
