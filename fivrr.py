@@ -65,12 +65,12 @@ def start(update, context):
       squr1 = cur.fetchall()[0]
       
       context.bot.send_message(chat_id=user_iid, text=f"Welcome to India's first Telegram Bot for finding freelance work with client's contact numbers. Get started by typing /start to get new leads every time. \n\nAs a welcome gift, we are providing 2 free leads for you to get started.")
-      cur.execute("SELECT * FROM jobs where date between '2023-04-25' and '2023-04-26'")
+      cur.execute("SELECT j.* , (select count(l.lead_id) from leaddata l where l.job_id = j.job_id) as counter FROM jobs j where date between '2023-04-26' and '2023-04-27'")
       jobs=cur.fetchall()
       yourjob = []
       for y in jobs:
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=y[0])],])
-        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {'X'*(len(y[5])-2)}{y[5][-2:]}\nName -: {y[2]}\nDate -: {y[6]}" , reply_markup=reply_markup)
+        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {'X'*(len(y[5])-2)}{y[5][-2:]}\nName -: {y[2]}\nDate -: {y[6]}\nResponsed -: {y[7]}" , reply_markup=reply_markup)
     else :
       avl2 = f"SELECT * FROM users WHERE user_key = {user_iid}"
       cur.execute(avl2)
@@ -78,12 +78,12 @@ def start(update, context):
       context.bot.send_message(chat_id=user_iid, text=f"Welcome to India's first Telegram Bot for finding freelance work with client's contact numbers. Get started by typing /start to get new leads every time. \n\nAs a welcome gift, we are providing 2 free leads for you to get started.")
       context.bot.send_message(chat_id=user_iid, text=f"Finding Your Job ...")
       
-      cur.execute("SELECT * FROM jobs where date between '2023-04-25' and '2023-04-26'")
+      cur.execute("SELECT j.* , (select count(l.lead_id) from leaddata l where l.job_id = j.job_id) as counter FROM jobs j where date between '2023-04-26' and '2023-04-27'")
       jobs=cur.fetchall()
       yourjob = []
       for y in jobs:
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=y[0])],])
-        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {'X'*(len(y[5])-2)}{y[5][-2:]}\nName -: {y[2]}\nDate -: {y[6]}" , reply_markup=reply_markup)
+        context.bot.send_message(chat_id=user_iid, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {'X'*(len(y[5])-2)}{y[5][-2:]}\nName -: {y[2]}\nDate -: {y[6]}\nResponsed -: {y[7]}" , reply_markup=reply_markup)
     conn.commit()
         
 def InlineKeyboardHandler(update: Update, _: CallbackContext):
