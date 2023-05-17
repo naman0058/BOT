@@ -65,7 +65,7 @@ def start(update, context):
       squr1 = cur.fetchall()[0]
       
       context.bot.send_message(chat_id=user_iid, text=f"Welcome to India's first Telegram Bot for finding freelance work with client's contact numbers. Get started by typing /start to get new leads every time. \n\nAs a welcome gift, we are providing 2 free leads for you to get started.")
-      cur.execute("SELECT j.* , (select count(l.lead_id) from leaddata l where l.job_id = j.job_id) as counter FROM jobs j where date between '2023-05-15' and '2023-05-16'")
+      cur.execute("SELECT j.* , (select count(l.lead_id) from leaddata l where l.job_id = j.job_id) as counter FROM jobs j where date between '2023-05-16' and '2023-05-17'")
       jobs=cur.fetchall()
       yourjob = []
       for y in jobs:
@@ -78,7 +78,7 @@ def start(update, context):
       context.bot.send_message(chat_id=user_iid, text=f"Welcome to India's first Telegram Bot for finding freelance work with client's contact numbers. Get started by typing /start to get new leads every time. \n\nAs a welcome gift, we are providing 2 free leads for you to get started.")
       context.bot.send_message(chat_id=user_iid, text=f"Finding Your Job ...")
       
-      cur.execute("SELECT j.* , (select count(l.lead_id) from leaddata l where l.job_id = j.job_id) as counter FROM jobs j where date between '2023-05-15' and '2023-05-16'")
+      cur.execute("SELECT j.* , (select count(l.lead_id) from leaddata l where l.job_id = j.job_id) as counter FROM jobs j where date between '2023-05-16' and '2023-05-17'")
       jobs=cur.fetchall()
       yourjob = []
       for y in jobs:
@@ -129,7 +129,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {y[5]}\nName -: {y[2]}\nDate -: {y[6]}" )
         else:
             
-            _.bot.send_message(chat_id=user_key, text=f"Hii Your Balance is Low . Please recharge your account by clicking on below -: \ncontact ID -: @taskTango \nYour Unique ID -: {user_key}" ,)
+            _.bot.send_message(chat_id=user_key, text=f"Dear valued customer, we would like to inform you that your account balance is currently low. To continue receiving unlimited leads, we recommend recharging your account by selecting one of the following plans:\n\nRs. 200 for 15 days (https://filemakr.com/recharge/{user_key})\n\nRs. 300 for one month (https://filemakr.com/monthly-recharge/{user_key})\n\nTo proceed with the recharge, please click on the respective plan. If you have any further inquiries or concerns, please do not hesitate to contact us at @taskTango. Your unique identification number is {user_key}.Thank you for choosing our services.")
     
     else:
         job = f"SELECT * FROM jobs WHERE job_id = {option}"
