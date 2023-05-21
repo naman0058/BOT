@@ -129,7 +129,7 @@ def InlineKeyboardHandler(update: Update, _: CallbackContext):
             _.bot.send_message(chat_id=user_key, text=f"Title -: {y[1]}\nDescription -: {y[3]}\nContact -: {y[5]}\nName -: {y[2]}\nDate -: {y[6]}" )
         else:
             
-            _.bot.send_message(chat_id=user_key, text=f"Dear valued customer, we would like to inform you that your account balance is currently low. To continue receiving unlimited leads, we recommend recharging your account by selecting one of the following plans:\n\nRs. 200 for 15 days (https://filemakr.com/recharge/{user_key})\n\nRs. 300 for one month (https://filemakr.com/monthly-recharge/{user_key})\n\nTo proceed with the recharge, please click on the respective plan. If you have any further inquiries or concerns, please do not hesitate to contact us at @taskTango. Your unique identification number is {user_key}.Thank you for choosing our services.")
+            _.bot.send_message(chat_id=user_key, text=f"Dear valued customer, we would like to inform you that your account balance is currently low. To continue receiving unlimited leads, we recommend recharging your account by selecting one of the following plans:\n\nRs. 100 for one month (https://filemakr.com/monthly-recharge/{user_key})\n\nTo proceed with the recharge, please click on the respective plan. If you have any further inquiries or concerns, please do not hesitate to contact us at @taskTango. Your unique identification number is {user_key}.Thank you for choosing our services.")
     
     else:
         job = f"SELECT * FROM jobs WHERE job_id = {option}"
