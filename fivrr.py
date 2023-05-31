@@ -40,7 +40,7 @@ def start(update: Update, context: CallbackContext):
     today = datetime.now().date()
     yesterday = today - timedelta(days=1)
     
-    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE date BETWEEN %s AND %s", (yesterday, today))
+    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
     jobs = cur.fetchall()
     
     for job in jobs:
