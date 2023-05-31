@@ -47,6 +47,13 @@ def start(update: Update, context: CallbackContext):
         reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
         context.bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
     
+    # Fetch the updated balance from the database
+    cur.execute("SELECT Balance FROM users WHERE user_key = %s", (user_id,))
+    balance = cur.fetchone()[0]
+    
+    # Display the updated balance to the user
+    context.bot.send_message(chat_id=user_id, text=f"Your current balance is {balance}.")
+    
     # Print when a user comes
     print(f"User {user_id} ({username}) has started the bot.")
 
@@ -61,12 +68,9 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
     if lead is None:
         cur.execute("SELECT * FROM users WHERE user_key = %s", (user_key,))
         user = cur.fetchone()
-        print(user)
         
         if user[3] >= 25 or user[3] is None:
             cur.execute("UPDATE users SET Balance = Balance - 25 WHERE user_key = %s", (user_key,))
-            conn.commit()
-            
             today = datetime.now()
             cur.execute("INSERT INTO leaddata(job_id, user_key, date) VALUES (%s, %s, %s)", (option, user_key, today))
             conn.commit()
