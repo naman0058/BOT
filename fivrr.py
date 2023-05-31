@@ -37,6 +37,7 @@ def start(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=user_id, text="Welcome back!")
     
     # Get and send the job data for today and yesterday to the user
+    conn.commit()
     today = datetime.now().date()
     yesterday = today - timedelta(days=1)
     
