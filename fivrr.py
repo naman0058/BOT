@@ -3,6 +3,7 @@ import mysql.connector
 from datetime import datetime, timedelta
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
+import time
 
 # Connect to the MySQL database
 conn = mysql.connector.connect(
@@ -36,26 +37,20 @@ def start(update: Update, context: CallbackContext):
     else:
         context.bot.send_message(chat_id=user_id, text="Welcome back!")
     
-    # Get and send the job data for today and yesterday to the user
-    today = datetime.now().date()
-    yesterday = today - timedelta(days=1)
-    
-    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
-    jobs = cur.fetchall()
-    
-    for job in jobs:
-        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
-        context.bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
-    
-    # Fetch the updated balance from the database
-    cur.execute("SELECT Balance FROM users WHERE user_key = %s", (user_id,))
-    balance = cur.fetchone()[0]
-    
-    # Display the updated balance to the user
-    context.bot.send_message(chat_id=user_id, text=f"Your current balance is {balance}.")
-    
-    # Print when a user comes
-    print(f"User {user_id} ({username}) has started the bot.")
+    while True:
+        # Get and send the job data for today and yesterday to the user
+        today = datetime.now().date()
+        yesterday = today - timedelta(days=1)
+        
+        cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
+        jobs = cur.fetchall()
+        
+        for job in jobs:
+            reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
+            context.bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
+        
+        # Sleep for 1 minute before fetching and sending new data
+        time.sleep(60)
 
 
 def inline_keyboard_handler(update: Update, context: CallbackContext):
@@ -68,6 +63,7 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
     if lead is None:
         cur.execute("SELECT * FROM users WHERE user_key = %s", (user_key,))
         user = cur.fetchone()
+        print(user)
         
         if user[3] >= 25 or user[3] is None:
             cur.execute("UPDATE users SET Balance = Balance - 25 WHERE user_key = %s", (user_key,))
