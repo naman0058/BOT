@@ -65,6 +65,8 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
         
         if user[3] >= 25 or user[3] is None:
             cur.execute("UPDATE users SET Balance = Balance - 25 WHERE user_key = %s", (user_key,))
+            conn.commit()
+            
             today = datetime.now()
             cur.execute("INSERT INTO leaddata(job_id, user_key, date) VALUES (%s, %s, %s)", (option, user_key, today))
             conn.commit()
