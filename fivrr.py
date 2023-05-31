@@ -112,7 +112,7 @@ def fetch_new_leads():
 
 
 # Create a new Telegram bot with the provided token
-bot_token = 'YOUR_BOT_TOKEN'
+bot_token = '6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4'
 bot = telegram.Bot(token=bot_token)
 
 # Set up an Updater to handle incoming messages
