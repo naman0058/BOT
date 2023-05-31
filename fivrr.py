@@ -55,6 +55,9 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
     user_key = update.callback_query.message.chat_id
     option = update.callback_query.data
     
+    # Fetch the latest data from the database
+    conn.commit()
+    
     cur.execute("SELECT * FROM leaddata WHERE job_id = %s AND user_key = %s", (option, user_key))
     lead = cur.fetchone()
     
@@ -89,6 +92,9 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
 def details(update: Update, context: CallbackContext):
     user_id = update.message.chat_id
     
+    # Fetch the latest data from the database
+    conn.commit()
+    
     cur.execute("SELECT * FROM users WHERE user_key = %s", (user_id,))
     user = cur.fetchone()
     
@@ -99,7 +105,7 @@ def details(update: Update, context: CallbackContext):
 
 
 # Create a new Telegram bot with the provided token
-bot_token = '6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4'
+bot_token = 'YOUR_BOT_TOKEN'
 bot = telegram.Bot(token=bot_token)
 
 # Set up an Updater to handle incoming messages
