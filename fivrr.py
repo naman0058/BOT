@@ -46,6 +46,9 @@ def start(update: Update, context: CallbackContext):
     for job in jobs:
         reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
         context.bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
+    
+    # Print when a user comes
+    print(f"User {user_id} ({username}) has started the bot.")
 
 
 def inline_keyboard_handler(update: Update, context: CallbackContext):
@@ -58,6 +61,7 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
     if lead is None:
         cur.execute("SELECT * FROM users WHERE user_key = %s", (user_key,))
         user = cur.fetchone()
+        print(user)
         
         if user[3] >= 25 or user[3] is None:
             cur.execute("UPDATE users SET Balance = Balance - 25 WHERE user_key = %s", (user_key,))
@@ -69,6 +73,9 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
             job = cur.fetchone()
             
             context.bot.send_message(chat_id=user_key, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {job[5]}\nName: {job[2]}\nDate: {job[6]}")
+            
+            # Print when a user picks a lead
+            print(f"User {user_key} has picked lead {option}.")
         else:
             context.bot.send_message(chat_id=user_key, text=f"Dear valued customer, we would like to inform you that your account balance is currently low. To continue receiving unlimited leads, we recommend recharging your account by selecting one of the following plans:\n\nRs. 100 for one month (https://filemakr.com/monthly-recharge/{user_key})\n\nTo proceed with the recharge, please click on the respective plan. If you have any further inquiries or concerns, please do not hesitate to contact us at @taskTango. Your unique identification number is {user_key}. Thank you for choosing our services.")
     
