@@ -3,7 +3,6 @@ import mysql.connector
 from datetime import datetime, timedelta
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
-import time
 
 # Connect to the MySQL database
 conn = mysql.connector.connect(
@@ -37,20 +36,19 @@ def start(update: Update, context: CallbackContext):
     else:
         context.bot.send_message(chat_id=user_id, text="Welcome back!")
     
-    while True:
-        # Get and send the job data for today and yesterday to the user
-        today = datetime.now().date()
-        yesterday = today - timedelta(days=1)
-        
-        cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
-        jobs = cur.fetchall()
-        
-        for job in jobs:
-            reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
-            context.bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
-        
-        # Sleep for 1 minute before fetching and sending new data
-        time.sleep(60)
+    # Get and send the job data for today and yesterday to the user
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    
+    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
+    jobs = cur.fetchall()
+    
+    for job in jobs:
+        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
+        context.bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
+    
+    # Print when a user comes
+    print(f"User {user_id} ({username}) has started the bot.")
 
 
 def inline_keyboard_handler(update: Update, context: CallbackContext):
@@ -100,8 +98,21 @@ def details(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=user_id, text="User details not found.")
 
 
+def fetch_new_leads():
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    
+    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
+    jobs = cur.fetchall()
+    
+    for job in jobs:
+        user_id = job[8]  # Assuming the user_key is stored in the 8th column
+        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
+        bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
+
+
 # Create a new Telegram bot with the provided token
-bot_token = '6224747889:AAE_ox7z8etC0_G8C5owm67Be644-G8htl4'
+bot_token = 'YOUR_BOT_TOKEN'
 bot = telegram.Bot(token=bot_token)
 
 # Set up an Updater to handle incoming messages
@@ -114,3 +125,9 @@ updater.dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
 
 # Start the bot
 updater.start_polling()
+
+# Fetch new leads periodically
+while True:
+    fetch_new_leads()
+    # Sleep for a specific interval (e.g., 1 hour)
+    time.sleep(3600)
