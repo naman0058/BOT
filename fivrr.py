@@ -55,6 +55,9 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
     user_key = update.callback_query.message.chat_id
     option = update.callback_query.data
     
+    # Fetch the latest data from the database
+    conn.commit()
+    
     cur.execute("SELECT * FROM leaddata WHERE job_id = %s AND user_key = %s", (option, user_key))
     lead = cur.fetchone()
     
@@ -89,6 +92,9 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
 def details(update: Update, context: CallbackContext):
     user_id = update.message.chat_id
     
+    # Fetch the latest data from the database
+    conn.commit()
+    
     cur.execute("SELECT * FROM users WHERE user_key = %s", (user_id,))
     user = cur.fetchone()
     
@@ -96,19 +102,6 @@ def details(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=user_id, text=f"Username: {user[2]}\nUser ID: {user[1]}\nBalance: {user[3]}")
     else:
         context.bot.send_message(chat_id=user_id, text="User details not found.")
-
-
-def fetch_new_leads():
-    today = datetime.now().date()
-    yesterday = today - timedelta(days=1)
-    
-    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
-    jobs = cur.fetchall()
-    
-    for job in jobs:
-        user_id = job[8]  # Assuming the user_key is stored in the 8th column
-        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Pick Leads', callback_data=job[0])]])
-        bot.send_message(chat_id=user_id, text=f"Title: {job[1]}\nDescription: {job[3]}\nContact: {'X'*(len(job[5])-2)}{job[5][-2:]}\nName: {job[2]}\nDate: {job[6]}\nResponsed: {job[7]}", reply_markup=reply_markup)
 
 
 # Create a new Telegram bot with the provided token
@@ -125,9 +118,3 @@ updater.dispatcher.add_handler(CallbackQueryHandler(inline_keyboard_handler))
 
 # Start the bot
 updater.start_polling()
-
-# Fetch new leads periodically
-while True:
-    fetch_new_leads()
-    # Sleep for a specific interval (e.g., 1 hour)
-    time.sleep(3600)
