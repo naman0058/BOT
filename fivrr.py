@@ -1,3 +1,4 @@
+import telegram
 import mysql.connector
 from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
