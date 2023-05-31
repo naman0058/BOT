@@ -1,6 +1,6 @@
 import telegram
 import mysql.connector
-from datetime import datetime
+from datetime import datetime, timedelta
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
 
@@ -36,8 +36,11 @@ def start(update: Update, context: CallbackContext):
     else:
         context.bot.send_message(chat_id=user_id, text="Welcome back!")
     
-    # Get and send the job data for the user
-    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j")
+    # Get and send the job data for today and yesterday to the user
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    
+    cur.execute("SELECT j.*, (SELECT COUNT(l.lead_id) FROM leaddata l WHERE l.job_id = j.job_id) AS counter FROM jobs j WHERE DATE(date) BETWEEN %s AND %s", (yesterday, today))
     jobs = cur.fetchall()
     
     for job in jobs:
