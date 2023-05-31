@@ -61,6 +61,7 @@ def inline_keyboard_handler(update: Update, context: CallbackContext):
     if lead is None:
         cur.execute("SELECT * FROM users WHERE user_key = %s", (user_key,))
         user = cur.fetchone()
+        print(user)
         
         if user[3] >= 25 or user[3] is None:
             cur.execute("UPDATE users SET Balance = Balance - 25 WHERE user_key = %s", (user_key,))
