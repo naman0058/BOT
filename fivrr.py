@@ -6,9 +6,9 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, Callback
 
 # Connect to the MySQL database
 conn = mysql.connector.connect(
-    host='db-mysql-blr1-69812-do-user-12247241-0.b.db.ondigitalocean.com',
+    host='db-mysql-blr1-55215-do-user-13029391-0.b.db.ondigitalocean.com',
     user='doadmin',
-    passwd='AVNS_y2INtIf0l_w0ZJgiY29',
+    passwd='AVNS_BUlYRoHmtHSKlCjHe5y',
     database='leads',
     port=25060
 )
